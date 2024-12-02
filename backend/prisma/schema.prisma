@@ -18,6 +18,7 @@ model UsersTable {
   AuthToken String
   Callsign String
   Faction String
+
   SessionTokens SessionTokensTable[]
   Ships ShipTable[]
 }
@@ -26,6 +27,7 @@ model SessionTokensTable {
   SessionTokenID String @id @default(auto()) @map("_id") @db.ObjectId
   UserID String @db.ObjectId
   TimeCreated DateTime
+  
   Users UsersTable @relation(fields: [UserID], references: [UserID])
 }
 

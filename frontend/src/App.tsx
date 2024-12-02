@@ -1,14 +1,15 @@
-import './App.css';
+import './styles/App.css';
+import Home from './pages/Home';
+import { AlertProvider } from './context/AlertContext';
+import GlobalAlert from './components/utils/GlobalAlert';
 
 function App() {
   return (
     <>
-      <h1>SpaceTraders API Task</h1>
-      <p>
-        Good luck! <br />
-        P.S. feel free to remove all CSS and start from scratch, or use as a
-        base, as you like.
-      </p>
+      <AlertProvider>
+        <GlobalAlert />
+        <Home />
+      </AlertProvider>
     </>
   );
 }
