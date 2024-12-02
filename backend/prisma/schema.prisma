@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model UsersTable {
+  UserID String @id @default(auto()) @map("_id") @db.ObjectId
+  AuthToken String
+  Callsign String
+  Faction String
+  SessionTokens SessionTokensTable[]
+  Ships ShipTable[]
+}
+
+model SessionTokensTable {
+  SessionTokenID String @id @default(auto()) @map("_id") @db.ObjectId
+  UserID String @db.ObjectId
+  TimeCreated DateTime
+  Users UsersTable @relation(fields: [UserID], references: [UserID])
+}
+
+model ShipTable {
+  ShipIDid String @id @default(auto()) @map("_id") @db.ObjectId
+  UserID String @db.ObjectId
+  Symbol String
+  ExpiryTime DateTime
+  Data Json
+
+  User  UsersTable @relation(fields: [UserID], references: [UserID])
+}
