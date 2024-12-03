@@ -34,7 +34,7 @@ export const AlertProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const [state, dispatch] = useReducer(alertReducer, { alerts: [] });
 
     const addAlert = (message: string, type: 'success' | 'error' | 'info' | 'warning') => {
-        const id = Math.random().toString(36).substr(2, 9); // create a random ID
+        const id = Math.random().toString(36).substr(2, 9); // Create a random ID
         dispatch({ type: 'ADD_ALERT', alert: { message, type, id } });
         setTimeout(() => dispatch({ type: 'REMOVE_ALERT', id }), 3000); // Remove alert after 3 seconds
     };
