@@ -214,7 +214,7 @@ authRoutes.post('/auto-login', async (req: Request, res: Response<AuthResponse>)
 
 // Logout Route
 authRoutes.post('/logout', async (req: Request, res: Response<AuthResponse>) => {
-    const token = req.headers.authorization?.split(' ')[1]; // Expecting a Bearer token
+    const token = req.cookies.session_token;
 
     if (!token) {
         res.status(400).send({ error: 'Token is required' });
