@@ -1,16 +1,12 @@
 # Technical Stack
 
 - Frontend: React, TypeScript, Axios
-- Backend: Node, Express
+- Backend: Node, Express, Axios
 - ORM: Prisma
 - Database: MongoDB
 
-# Docker
+# Endpoint Testing
 
-## Docker MongoDB for development
+## ReqBin
 
-Build the mongo container
-`docker-compose build --no-cache mongo`
-
-Run the mongo container:
-`docker run --name mongodb -d -p 27017:27017 mongo`
+https://reqbin.com/

@@ -12,7 +12,7 @@ const Login: React.FC = () => {
     return (
         <div className='login-container'>
             <div>
-                {activeComponent === 'SignIn' ? <SignIn /> : <SignUp />}
+                {activeComponent === 'SignIn' ? <SignIn /> : <SignUp toggle={toggleComponent} />}
             </div>
             <button onClick={toggleComponent}>
                 {activeComponent === 'SignIn' ? 'Switch to Sign Up' : 'Switch to Sign In'}

@@ -1,22 +1,31 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+import { useAlert } from "../../context/AlertContext";
+
+interface SignUpProps {
+    toggle: () => void;
+}
 
 interface FormState {
     username: string;
     password: string;
-    callsign: string;
     faction: string;
 }
 
 interface FormErrors {
     username?: string;
     password?: string;
-    callsign?: string;
     faction?: string;
 }
 
-const SignUp: React.FC = () => {
-    const [formState, setFormState] = useState<FormState>({ username: "", password: "", callsign: "", faction: "COSMIC" });
+const SignUp: React.FC<SignUpProps> = (toggle) => {
+    const [formState, setFormState] = useState<FormState>({ username: "", password: "", faction: "COSMIC" });
     const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+    const { addAlert } = useAlert();
+
+    const apiURL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -52,18 +61,28 @@ const SignUp: React.FC = () => {
                 "Password must be at least 6 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
         }
 
-        if (!formState.callsign.trim()) {
-            errors.callsign = "Callsign is required";
-        }
-
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validate()) {
             console.log("Form submitted successfully:", formState);
+            handleSignUp(formState);
+        }
+    };
+
+    const handleSignUp = async (formState: FormState) => {
+        try {
+            const response = await axios.post( apiURL+'/auth/signup', { ...formState }, { withCredentials: true });
+
+            if (response.data.message) {
+                addAlert('Signup successful!', 'success');
+                toggle;
+            }
+        } catch (error: any) {
+            addAlert(error.response?.data?.error || 'An error occurred during signup.', 'error');
         }
     };
 
@@ -94,18 +113,6 @@ const SignUp: React.FC = () => {
                         className="p-2 w-full"
                     />
                     {formErrors.password && <p className="text-red-600">{formErrors.password}</p>}
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        id="callsign"
-                        name="callsign"
-                        value={formState.callsign}
-                        placeholder="callsign"
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    />
-                    {formErrors.callsign && <p className="text-red-600">{formErrors.callsign}</p>}
                 </div>
                 <div>
                     <select

@@ -16,7 +16,8 @@ datasource db {
 model UsersTable {
   UserID String @id @default(auto()) @map("_id") @db.ObjectId
   AuthToken String
-  Callsign String
+  Password String
+  Username String @unique
   Faction String
 
   SessionTokens SessionTokensTable[]
@@ -24,9 +25,9 @@ model UsersTable {
 }
 
 model SessionTokensTable {
-  SessionTokenID String @id @default(auto()) @map("_id") @db.ObjectId
+  SessionTokenID String @id @map("_id")
   UserID String @db.ObjectId
-  TimeCreated DateTime
+  ExpiryTime DateTime
   
   Users UsersTable @relation(fields: [UserID], references: [UserID])
 }

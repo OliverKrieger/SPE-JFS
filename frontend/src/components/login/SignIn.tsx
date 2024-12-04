@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+import { useAlert } from "../../context/AlertContext";
 
 interface FormState {
     username: string;
@@ -13,6 +16,10 @@ interface FormErrors {
 const SignIn: React.FC = () => {
     const [formState, setFormState] = useState<FormState>({ username: "", password: "" });
     const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+    const { addAlert } = useAlert();
+
+    const apiURL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -49,6 +56,19 @@ const SignIn: React.FC = () => {
         e.preventDefault();
         if (validate()) {
             console.log("Form submitted successfully:", formState);
+            handleSignIn(formState);
+        }
+    };
+
+    const handleSignIn = async (formState: FormState) => {
+        try {
+            const response = await axios.post( apiURL+'/auth/signin', { ...formState }, { withCredentials: true });
+
+            if (response.data.message) {
+                addAlert('Signin successful! You are logged in.', 'success');
+            }
+        } catch (error: any) {
+            addAlert(error.response?.data?.error || 'An error occurred during signup.', 'error');
         }
     };
 
