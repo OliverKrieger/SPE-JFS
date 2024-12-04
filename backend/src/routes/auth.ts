@@ -155,7 +155,7 @@ authRoutes.post('/signin', async (req: Request<{}, {}, SignInBody>, res: Respons
 
 // Auto-login with session token
 authRoutes.post('/auto-login', async (req: Request, res: Response<AuthResponse>) => {
-    const token = req.headers.authorization?.split(' ')[1]; // Expecting a Bearer token
+    const token = req.cookies.session_token;
 
     if (!token) {
         res.status(401).send({ error: 'No token provided' });

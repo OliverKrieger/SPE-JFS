@@ -76,7 +76,7 @@ const SignIn: React.FC = () => {
                     faction: response.data.user.faction
                 }));
 
-                addAlert('Signin successful! You are logged in.', 'success');
+                addAlert(`Signin for ${response.data.user.username} successful!`, 'success');
             }
         } catch (error: any) {
             addAlert(error.response?.data?.error || 'An error occurred during signup.', 'error');
