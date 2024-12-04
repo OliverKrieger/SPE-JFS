@@ -1,5 +1,8 @@
 import React from 'react';
 
+import ShipList from '../Ships/ShipList';
+import Account from '../profile/Account';
+
 interface DashContentAreaProps {
     activeTab: string;
 }
@@ -8,9 +11,9 @@ const DashContentArea: React.FC<DashContentAreaProps> = ({ activeTab }) => {
     const renderContent = () => {
         switch (activeTab) {
             case 'profile':
-                return <div>Profile Content</div>;
+                return <Account />
             case 'ships':
-                return <div>Ships Content</div>;
+                return <ShipList />
             case 'settings':
                 return <div>Settings Content</div>;
             default:

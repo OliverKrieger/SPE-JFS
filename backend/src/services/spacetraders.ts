@@ -26,11 +26,11 @@ export async function registerWithSpaceTraders(username: string, faction: string
     }
 }
 
-export async function fetchShips() {
+export async function fetchShips(AuthToken: string) {
     try {
         const response = await axios.get(`${API_BASE_URL}/v2/my/ships`, {
             headers: {
-                Authorization: `Bearer ${config.SPACETRADERS_API_KEY}`,
+                Authorization: `Bearer ${AuthToken}`,
             },
         });
         return response.data;

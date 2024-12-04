@@ -5,6 +5,8 @@ import prisma from '../prisma';
 
 import { registerWithSpaceTraders } from '../services/spacetraders';
 
+import { AuthenticatedRequest, validateToken } from '../middleware/validateToken';
+
 // Define the types for request bodies
 interface SignUpBody {
     username: string;
@@ -61,7 +63,7 @@ authRoutes.post('/signup', async (req: Request<{}, {}, SignUpBody>, res: Respons
             res.status(spaceTradersResponse.error.code).send({ error: 'Failed to register with SpaceTraders.io' });
             return;
         }
-        else{
+        else {
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = await prisma.usersTable.create({
                 data: {
@@ -154,40 +156,17 @@ authRoutes.post('/signin', async (req: Request<{}, {}, SignInBody>, res: Respons
 });
 
 // Auto-login with session token
-authRoutes.post('/auto-login', async (req: Request, res: Response<AuthResponse>) => {
-    const token = req.cookies.session_token;
+authRoutes.post('/auto-login', validateToken, async (req: Request, res: Response<AuthResponse>) => {
+    const { userId } = req as AuthenticatedRequest;
 
-    if (!token) {
-        res.status(401).send({ error: 'No token provided' });
+    if (!userId) {
+        res.status(401).send({ error: 'Unauthorized access' });
         return;
     }
 
     try {
-        // Decode and verify the JWT token
-        const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-
-        // Look up the token in the database
-        const session = await prisma.sessionTokensTable.findUnique({
-            where: { SessionTokenID: token },
-        });
-
-        if (!session) {
-            res.status(401).send({ error: 'Invalid token' });
-            return;
-        }
-
-        // Check if the token has expired
-        if (session.ExpiryTime < new Date()) {
-            await prisma.sessionTokensTable.delete({
-                where: { SessionTokenID: token },
-            });
-            res.status(401).send({ error: 'Token has expired, please log in again' });
-            return;
-        }
-
-        // Find the user associated with the token
         const user = await prisma.usersTable.findUnique({
-            where: { UserID: decoded.userId },
+            where: { UserID: userId },
         });
 
         if (!user) {
@@ -195,19 +174,17 @@ authRoutes.post('/auto-login', async (req: Request, res: Response<AuthResponse>)
             return;
         }
 
-        // Respond with a success message and optionally user info
         res.status(200).send({
             message: 'User logged in successfully',
             user: {
                 userId: user.UserID,
                 username: user.Username,
-                faction: user.Faction
+                faction: user.Faction,
             },
         });
-        return;
     } catch (error) {
         console.error('Error during auto-login:', error);
-        res.status(500).send({ error: 'Error verifying token' });
+        res.status(500).send({ error: 'Error retrieving user' });
         return;
     }
 });
@@ -291,7 +268,7 @@ authRoutes.delete('/delete', async (req: Request<{}, {}, { token: string }>, res
         });
 
         res.status(200).send({
-            message: 'User '+deletedUser.Username+' deleted successfully',
+            message: 'User ' + deletedUser.Username + ' deleted successfully',
         });
         return;
     } catch (error) {
