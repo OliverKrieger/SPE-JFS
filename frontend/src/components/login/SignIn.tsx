@@ -3,6 +3,9 @@ import axios from "axios";
 
 import { useAlert } from "../../context/AlertContext";
 
+import { useDispatch } from 'react-redux';
+import { login } from "../../store/authSlice";
+
 interface FormState {
     username: string;
     password: string;
@@ -18,6 +21,8 @@ const SignIn: React.FC = () => {
     const [formErrors, setFormErrors] = useState<FormErrors>({});
 
     const { addAlert } = useAlert();
+
+    const dispatch = useDispatch();
 
     const apiURL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
@@ -65,6 +70,12 @@ const SignIn: React.FC = () => {
             const response = await axios.post( apiURL+'/auth/signin', { ...formState }, { withCredentials: true });
 
             if (response.data.message) {
+                dispatch(login({
+                    userId: response.data.user.userId,
+                    username: response.data.user.username,
+                    faction: response.data.user.faction
+                }));
+
                 addAlert('Signin successful! You are logged in.', 'success');
             }
         } catch (error: any) {

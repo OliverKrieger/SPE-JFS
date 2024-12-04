@@ -1,3 +1,6 @@
+import { Provider } from 'react-redux';
+import store from './store/store';
+
 import './styles/App.css';
 
 import Home from './pages/Home';
@@ -9,12 +12,14 @@ import { OverlayProvider } from './context/OverlayContext';
 
 function App() {
   return (
-    <AlertProvider>
-      <OverlayProvider>
-        <GlobalAlert />
-        <Home />
-      </OverlayProvider>
-    </AlertProvider>
+    <Provider store={store}>
+      <AlertProvider>
+        <OverlayProvider>
+          <GlobalAlert />
+          <Home />
+        </OverlayProvider>
+      </AlertProvider>
+    </Provider>
   );
 }
 
