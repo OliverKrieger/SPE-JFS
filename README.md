@@ -15,6 +15,8 @@ BACKEND_PORT= "5000"
 FRONTEND_URL= "http://localhost:5173"
 NODE_ENV="local"
 
+It will of course be easier to run `docker-compose up` or `docker-compose up build` to run locally.
+
 # Endpoint Testing
 
 ## ReqBin
