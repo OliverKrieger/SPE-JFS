@@ -24,16 +24,46 @@ apiRoutes.post('/ships', validateToken, async (req: Request, res: Response) => {
             return;
         }
 
-        // TODO - If already exists and not "stale", return ship data from db 
-        // (can only retrieve ship names rather than return all the data)!
+        // Check database for existing ship data
+        const existingShips = await prisma.shipTable.findMany({
+            where: { UserID: userId },
+        });
 
-        const data = await fetchShips(user.AuthToken);
+        const currentTime = new Date();
 
-        // TODO - Store to database
+        if (
+            existingShips.length > 0 &&
+            existingShips.every((ship) => ship.ExpiryTime > currentTime)
+        ) {
+            // Return ship names from database
+            const shipNames = existingShips.map((ship) => ship.Symbol);
+            res.status(200).send({
+                message: 'Ships retrieved from database',
+                data: shipNames,
+            });
+            return;
+        }
+
+        // If data did not exist or has expired, fetch from api
+        const shipResponse = await fetchShips(user.AuthToken);
+
+        // Store new ship data in the database with an expiry time
+        const expiryTime = new Date();
+        expiryTime.setHours(expiryTime.getHours() + 1);
+
+        await prisma.shipTable.deleteMany({ where: { UserID: userId } }); // Clear old data
+        await prisma.shipTable.createMany({
+            data: shipResponse.data.map((ship: any) => ({
+                UserID: userId,
+                Symbol: ship.symbol,
+                ExpiryTime: expiryTime,
+                Data: ship,
+            })),
+        });
         
         res.status(200).send({
             message: 'Fetching ships successful',
-            data: data,
+            data: shipResponse.data.map(ship => ship.symbol) // only return ship symbols
         });
         return;
     } catch (error) {

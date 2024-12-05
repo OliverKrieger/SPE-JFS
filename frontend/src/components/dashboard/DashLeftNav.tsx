@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface DashLeftNavProps {
     activeTab: string;
     setActiveTab: (tab: string) => void;

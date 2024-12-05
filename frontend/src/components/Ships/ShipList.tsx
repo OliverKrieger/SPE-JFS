@@ -3,12 +3,13 @@ import axios from "axios";
 
 import { useAlert } from "../../context/AlertContext";
 
-interface ShipsState {
-    data: string;
-}
+import LoadingSpinner from "../utils/LoadingSpinner";
 
+interface ShipsState {
+    data: string[];
+}
 const ShipList: React.FC = () => {
-    const [shipsState, setShipsState] = useState<ShipsState>({ data: ""});
+    const [shipsState, setShipsState] = useState<ShipsState>({ data: [] });
 
     const { addAlert } = useAlert();
 
@@ -17,26 +18,29 @@ const ShipList: React.FC = () => {
     useEffect(() => {
         const handleFetchShips = async () => {
             try {
-                const response = await axios.post( apiURL+'/api/ships', {}, { withCredentials: true });
-
+                const response = await axios.post(apiURL + '/api/ships', {}, { withCredentials: true });
+        
                 if (response.data.message) {
-                    addAlert(response.data.message, 'success');
-                    console.log("SHIP DATA: ", response.data);
-                    setShipsState({data:"Retrieved"});
+                    addAlert("Ships retrieved successfully!", 'success');
+                    setShipsState({ data: response.data.data });
                 }
             } catch (error: any) {
                 addAlert(error.response?.data?.error || 'There was an error in ship retrieval.', 'error');
             }
-        }
+        };
         handleFetchShips();
     }, []);
 
     return (
         <div className="ship-list-container">
-            {shipsState ? (
-                <div></div>
+            {shipsState.data.length > 0 ? (
+                <div>
+                    {shipsState.data.map((shipSymbol, index) => (
+                        <div key={index}>{shipSymbol}</div>
+                    ))}
+                </div>
             ) : (
-                <span>Loading</span>
+                <LoadingSpinner />
             )}
         </div>
     );

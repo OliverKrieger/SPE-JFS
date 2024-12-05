@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '../config/env';
 
-import { SpaceTradersRegisterError, SpaceTradersRegisterSuccess } from './types';
+import { SpaceTradersRegisterError, SpaceTradersRegisterSuccess, ShipResponse } from './types';
 
 const API_BASE_URL = 'https://api.spacetraders.io';
 
@@ -28,7 +28,7 @@ export async function registerWithSpaceTraders(username: string, faction: string
 
 export async function fetchShips(AuthToken: string) {
     try {
-        const response = await axios.get(`${API_BASE_URL}/v2/my/ships`, {
+        const response = await axios.get<ShipResponse>(`${API_BASE_URL}/v2/my/ships`, {
             headers: {
                 Authorization: `Bearer ${AuthToken}`,
             },

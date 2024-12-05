@@ -6,6 +6,8 @@ import { useAlert } from "../../context/AlertContext";
 import { useDispatch } from 'react-redux';
 import { login } from "../../store/authSlice";
 
+import LoadingSpinner from "../utils/LoadingSpinner";
+
 interface FormState {
     username: string;
     password: string;
@@ -19,6 +21,7 @@ interface FormErrors {
 const SignIn: React.FC = () => {
     const [formState, setFormState] = useState<FormState>({ username: "", password: "" });
     const [formErrors, setFormErrors] = useState<FormErrors>({});
+    const [loading, setLoading] = useState(false);
 
     const { addAlert } = useAlert();
 
@@ -66,6 +69,7 @@ const SignIn: React.FC = () => {
     };
 
     const handleSignIn = async (formState: FormState) => {
+        setLoading(true);
         try {
             const response = await axios.post( apiURL+'/auth/signin', { ...formState }, { withCredentials: true });
 
@@ -80,41 +84,47 @@ const SignIn: React.FC = () => {
             }
         } catch (error: any) {
             addAlert(error.response?.data?.error || 'An error occurred during signup.', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className='sign-in-container'>
             <h1>Sign In</h1>
-            <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
-                <div>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formState.username}
-                        placeholder="username"
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    />
-                    {formErrors.username && <p className="text-red-600">{formErrors.username}</p>}
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formState.password}
-                        placeholder="password"
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    />
-                    {formErrors.password && <p className="text-red-600">{formErrors.password}</p>}
-                </div>
-                <button type="submit" className="bg-slate-500 text-white px-4 py-2 rounded">
-                    Submit
-                </button>
-            </form>
+            {loading ? (
+                <LoadingSpinner />
+            ) : (
+                <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
+                    <div>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formState.username}
+                            placeholder="username"
+                            onChange={handleChange}
+                            className="p-2 w-full"
+                        />
+                        {formErrors.username && <p className="text-red-600">{formErrors.username}</p>}
+                    </div>
+                    <div>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formState.password}
+                            placeholder="password"
+                            onChange={handleChange}
+                            className="p-2 w-full"
+                        />
+                        {formErrors.password && <p className="text-red-600">{formErrors.password}</p>}
+                    </div>
+                    <button type="submit" className="bg-slate-500 text-white px-4 py-2 rounded">
+                        Submit
+                    </button>
+                </form>
+            )}
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useDispatch } from 'react-redux';
@@ -6,6 +6,7 @@ import { login } from "../store/authSlice";
 
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import LoadingSpinner from "../components/utils/LoadingSpinner";
 
 import { useAlert } from "../context/AlertContext";
 import { useOverlay } from "../context/OverlayContext";
@@ -19,6 +20,8 @@ const Home: React.FC = () => {
 
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const apiURL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
@@ -38,12 +41,22 @@ const Home: React.FC = () => {
                 }
             } catch (error: any) {
                 console.log(error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         handleAutoLogin(); // call on mount
     }, []); // empty dependencies, runs only once
 
+    if (isLoading) {
+        return (
+            <div className="home-container">
+                <LoadingSpinner /> {/* Show loading spinner while auto-login is in progress */}
+            </div>
+        );
+    }
+    
     return (
         <div className='home-container'>
             {!isLoggedIn ? <Login /> : <Dashboard />}

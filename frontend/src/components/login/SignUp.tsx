@@ -3,6 +3,8 @@ import axios from "axios";
 
 import { useAlert } from "../../context/AlertContext";
 
+import LoadingSpinner from "../utils/LoadingSpinner";
+
 interface SignUpProps {
     toggle: () => void;
 }
@@ -22,6 +24,7 @@ interface FormErrors {
 const SignUp: React.FC<SignUpProps> = (toggle) => {
     const [formState, setFormState] = useState<FormState>({ username: "", password: "", faction: "COSMIC" });
     const [formErrors, setFormErrors] = useState<FormErrors>({});
+    const [loading, setLoading] = useState(false);
 
     const { addAlert } = useAlert();
 
@@ -74,6 +77,7 @@ const SignUp: React.FC<SignUpProps> = (toggle) => {
     };
 
     const handleSignUp = async (formState: FormState) => {
+        setLoading(true);
         try {
             const response = await axios.post( apiURL+'/auth/signup', { ...formState }, { withCredentials: true });
 
@@ -83,62 +87,68 @@ const SignUp: React.FC<SignUpProps> = (toggle) => {
             }
         } catch (error: any) {
             addAlert(error.response?.data?.error || 'An error occurred during signup.', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className='sign-up-container'>
             <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
-                <div>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formState.username}
-                        placeholder="username"
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    />
-                    {formErrors.username && <p className="text-red-600">{formErrors.username}</p>}
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formState.password}
-                        placeholder="password"
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    />
-                    {formErrors.password && <p className="text-red-600">{formErrors.password}</p>}
-                </div>
-                <div>
-                    <select
-                        id="faction"
-                        name="faction"
-                        value={formState.faction}
-                        onChange={handleChange}
-                        className="p-2 w-full"
-                    >
-                        <option value="COSMIC">COSMIC</option>
-                        <option value="GALACTIC">GALACTIC</option>
-                        <option value="QUANTUM">QUANTUM</option>
-                        <option value="DOMINION">DOMINION</option>
-                        <option value="ASTRO">ASTRO</option>
-                        <option value="CORSAIRS">CORSAIRS</option>
-                        <option value="VOID">VOID</option>
-                        <option value="OBSIDIAN">OBSIDIAN</option>
-                        <option value="AEGIS">AEGIS</option>
-                        <option value="UNITED">UNITED</option>
-                    </select>
-                    {formErrors.faction && <p className="text-red-600">{formErrors.faction}</p>}
-                </div>
-                <button type="submit" className="bg-slate-500 text-white px-4 py-2 rounded">
-                    Submit
-                </button>
-            </form>
+            {loading ? (
+                <LoadingSpinner />
+            ) : (
+                <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
+                    <div>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formState.username}
+                            placeholder="username"
+                            onChange={handleChange}
+                            className="p-2 w-full"
+                        />
+                        {formErrors.username && <p className="text-red-600">{formErrors.username}</p>}
+                    </div>
+                    <div>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formState.password}
+                            placeholder="password"
+                            onChange={handleChange}
+                            className="p-2 w-full"
+                        />
+                        {formErrors.password && <p className="text-red-600">{formErrors.password}</p>}
+                    </div>
+                    <div>
+                        <select
+                            id="faction"
+                            name="faction"
+                            value={formState.faction}
+                            onChange={handleChange}
+                            className="p-2 w-full"
+                        >
+                            <option value="COSMIC">COSMIC</option>
+                            <option value="GALACTIC">GALACTIC</option>
+                            <option value="QUANTUM">QUANTUM</option>
+                            <option value="DOMINION">DOMINION</option>
+                            <option value="ASTRO">ASTRO</option>
+                            <option value="CORSAIRS">CORSAIRS</option>
+                            <option value="VOID">VOID</option>
+                            <option value="OBSIDIAN">OBSIDIAN</option>
+                            <option value="AEGIS">AEGIS</option>
+                            <option value="UNITED">UNITED</option>
+                        </select>
+                        {formErrors.faction && <p className="text-red-600">{formErrors.faction}</p>}
+                    </div>
+                    <button type="submit" className="bg-slate-500 text-white px-4 py-2 rounded">
+                        Submit
+                    </button>
+                </form>
+            )}
         </div>
     );
 };

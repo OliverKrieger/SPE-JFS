@@ -33,7 +33,7 @@ model SessionTokensTable {
 }
 
 model ShipTable {
-  ShipIDid String @id @default(auto()) @map("_id") @db.ObjectId
+  ShipID String @id @default(auto()) @map("_id") @db.ObjectId
   UserID String @db.ObjectId
   Symbol String
   ExpiryTime DateTime
