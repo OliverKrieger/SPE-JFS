@@ -15,7 +15,7 @@ BACKEND_PORT= "5000"
 FRONTEND_URL= "http://localhost:5173"
 NODE_ENV="local"
 
-It will of course be easier to run `docker-compose up` or `docker-compose up build` to run locally.
+It will of course be easier to run `docker-compose up` or `docker-compose up --build` to run locally.
 
 # Functionality
 
@@ -35,3 +35,5 @@ From the data point of view, when the user wants to view the ships, first the se
 Of course, if the load times increase, all the ships with their relevant info could be queried instead and stored on the frontend, only making one request to the server on the opening of the tab.
 
 On the frontend, everything is componentised, meaning that it is an SPA. Rather than changing routes, this makes the data and state managemenet much easier and fits well with something like the spacetraders.io. Tabs can be easily added to showcase more routes as they are added and there is a profile section to view user data and delete the user if need be. Spacetraders.io does not currently provide a delete agent on their side however, so the user will have to select a new username to create a new account each time.
+
+There are also tests added to backend with jest, though currently it only tests the login functionality. However, this could be extended to run any other tests as required.
