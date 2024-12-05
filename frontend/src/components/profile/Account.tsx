@@ -19,7 +19,7 @@ const Account: React.FC = () => {
 
     const handleConfirm = async () => {
         try {
-            const response = await axios.post( apiURL+'/auth/delete', {}, { withCredentials: true });
+            const response = await axios.post( apiURL+'/auth/delete-user', {}, { withCredentials: true });
 
             if (response.data.message) {
                 addAlert(`Account deleted successfully.`, 'success');

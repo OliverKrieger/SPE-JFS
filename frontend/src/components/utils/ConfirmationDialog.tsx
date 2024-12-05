@@ -13,7 +13,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   }) => {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-md shadow-lg max-w-sm">
+        <div className="bg-slate-800 p-6 rounded-md shadow-lg max-w-sm">
           <p className="text-center text-lg">{message}</p>
           <div className="mt-4 flex justify-between">
             <button

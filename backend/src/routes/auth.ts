@@ -232,39 +232,37 @@ authRoutes.post('/logout', async (req: Request, res: Response<AuthResponse>) => 
 
 
 // Delete User Route
-authRoutes.delete('/delete', async (req: Request<{}, {}, { token: string }>, res: Response<AuthResponse>) => {
-    const { token } = req.body;
+authRoutes.post('/delete-user', validateToken, async (req: Request<{}, {}, { token: string }>, res: Response<AuthResponse>) => {
+    const { userId } = req as AuthenticatedRequest;
 
-    if (!token) {
-        res.status(400).send({ error: 'Session token is required' });
+    if (!userId) {
+        res.status(401).send({ error: 'Unauthorized access' });
         return;
     }
 
     try {
-        const session = await prisma.sessionTokensTable.findUnique({
-            where: { SessionTokenID: token },
+        const user = await prisma.usersTable.findUnique({
+            where: { UserID: userId },
         });
 
-        if (!session) {
-            res.status(400).send({ error: 'Invalid session token' });
+        if (!user) {
+            res.status(404).send({ error: 'User not found' });
             return;
         }
 
-        const userId = session.UserID;
-
         // Delete ships associated with the user
         await prisma.shipTable.deleteMany({
-            where: { UserID: userId },
+            where: { UserID: user.UserID },
         });
 
         // Delete session tokens associated with the user
         await prisma.sessionTokensTable.deleteMany({
-            where: { UserID: userId },
+            where: { UserID: user.UserID },
         });
 
         // Delete user and associated session tokens
         const deletedUser = await prisma.usersTable.delete({
-            where: { UserID: userId },
+            where: { UserID: user.UserID },
         });
 
         res.status(200).send({
