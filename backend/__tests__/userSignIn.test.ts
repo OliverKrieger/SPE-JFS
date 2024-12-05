@@ -28,7 +28,6 @@ describe('User Sign In', () => {
             where: { Username: username },
         });
 
-        // Delete the test user
         // Delete ships associated with the user
         await prisma.shipTable.deleteMany({
             where: { UserID: user?.UserID },
