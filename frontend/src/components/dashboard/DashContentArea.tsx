@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ShipList from '../Ships/ShipList';
+import ShipList from '../ships/ShipList';
 import Account from '../profile/Account';
 
 interface DashContentAreaProps {

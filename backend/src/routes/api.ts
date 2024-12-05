@@ -6,7 +6,7 @@ import {AuthenticatedRequest, validateToken} from '../middleware/validateToken';
 
 const apiRoutes = Router();
 
-apiRoutes.post('/ships', validateToken, async (req: Request, res: Response) => {
+apiRoutes.post('/get-ships', validateToken, async (req: Request, res: Response) => {
     const { userId } = req as AuthenticatedRequest;
 
     if (!userId) {
@@ -69,6 +69,55 @@ apiRoutes.post('/ships', validateToken, async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error fetching ships:', error);
         res.status(500).send({ error: 'Error fetching ships' });
+        return;
+    }
+});
+
+apiRoutes.post('/get-ship', validateToken, async (req: Request, res: Response) => {
+    const { userId } = req as AuthenticatedRequest;
+
+    if (!userId) {
+        res.status(401).send({ error: 'Unauthorized access' });
+        return;
+    }
+
+    const { shipSymbol } = req.body;
+
+    if (!shipSymbol) {
+        res.status(400).send({ error: 'Missing shipSymbol parameter' });
+        return;
+    }
+
+    try {
+        // Ensure the user exists
+        const user = await prisma.usersTable.findUnique({
+            where: { UserID: userId },
+        });
+
+        if (!user) {
+            res.status(404).send({ error: 'User not found' });
+            return;
+        }
+
+        // Fetch the ship data associated with the userId and shipSymbol
+        const ship = await prisma.shipTable.findFirst({
+            where: {
+                UserID: userId,
+                Symbol: shipSymbol as string,
+            },
+        });
+
+        if (!ship) {
+            res.status(404).send({ error: 'Ship not found' });
+            return;
+        }
+
+        // Return the ship data
+        res.status(200).send(ship.Data);
+        return
+    } catch (error) {
+        console.error('Error fetching ship data:', error);
+        res.status(500).send({ error: 'An error occurred while fetching ship data' });
         return;
     }
 });

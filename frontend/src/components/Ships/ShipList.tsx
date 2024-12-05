@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useAlert } from "../../context/AlertContext";
+import { useOverlay } from "../../context/OverlayContext";
 
 import LoadingSpinner from "../utils/LoadingSpinner";
+import ShipInfo from "./ShipInfo";
+
 
 interface ShipsState {
     data: string[];
@@ -12,13 +15,14 @@ const ShipList: React.FC = () => {
     const [shipsState, setShipsState] = useState<ShipsState>({ data: [] });
 
     const { addAlert } = useAlert();
+    const { openOverlay } = useOverlay();
 
     const apiURL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
     useEffect(() => {
         const handleFetchShips = async () => {
             try {
-                const response = await axios.post(apiURL + '/api/ships', {}, { withCredentials: true });
+                const response = await axios.post(apiURL + '/api/get-ships', {}, { withCredentials: true });
         
                 if (response.data.message) {
                     addAlert("Ships retrieved successfully!", 'success');
@@ -36,7 +40,11 @@ const ShipList: React.FC = () => {
             {shipsState.data.length > 0 ? (
                 <div>
                     {shipsState.data.map((shipSymbol, index) => (
-                        <div key={index}>{shipSymbol}</div>
+                        <div key={index} onClick={() => openOverlay(
+                            <ShipInfo shipSymbol={shipSymbol} />
+                        )}>
+                            {shipSymbol}
+                        </div>
                     ))}
                 </div>
             ) : (

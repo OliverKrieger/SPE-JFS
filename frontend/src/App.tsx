@@ -15,8 +15,8 @@ function App() {
     <Provider store={store}>
       <AlertProvider>
         <OverlayProvider>
-          <GlobalAlert />
-          <Home />
+            <GlobalAlert />
+            <Home />
         </OverlayProvider>
       </AlertProvider>
     </Provider>
