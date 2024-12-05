@@ -49,7 +49,7 @@ apiRoutes.post('/get-ships', validateToken, async (req: Request, res: Response) 
 
         // Store new ship data in the database with an expiry time
         const expiryTime = new Date();
-        expiryTime.setHours(expiryTime.getHours() + 1);
+        expiryTime.setHours(expiryTime.getMinutes() + 5);
 
         await prisma.shipTable.deleteMany({ where: { UserID: userId } }); // Clear old data
         await prisma.shipTable.createMany({
