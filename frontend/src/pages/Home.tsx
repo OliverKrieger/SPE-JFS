@@ -49,14 +49,14 @@ const Home: React.FC = () => {
 
     if (isLoading) {
         return (
-            <div className="home-container">
+            <div className="home-container min-h-screen">
                 <LoadingSpinner /> {/* Show loading spinner while auto-login is in progress */}
             </div>
         );
     }
     
     return (
-        <div className='home-container'>
+        <div className='home-container min-h-screen'>
             {!isLoggedIn ? <Login /> : <Dashboard />}
         </div>
     );

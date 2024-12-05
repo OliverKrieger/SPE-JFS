@@ -38,12 +38,14 @@ const ShipList: React.FC = () => {
     return (
         <div className="ship-list-container">
             {shipsState.data.length > 0 ? (
-                <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 place-items-center p-4">
                     {shipsState.data.map((shipSymbol, index) => (
                         <div key={index} onClick={() => openOverlay(
                             <ShipInfo shipSymbol={shipSymbol} />
                         )}>
-                            {shipSymbol}
+                            <div className="cursor-pointer hover:bg-slate-500 transition-all ease-in-out p-4">
+                                🚀 {shipSymbol}
+                            </div>
                         </div>
                     ))}
                 </div>

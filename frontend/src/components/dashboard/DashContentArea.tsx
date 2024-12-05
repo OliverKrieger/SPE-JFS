@@ -14,15 +14,13 @@ const DashContentArea: React.FC<DashContentAreaProps> = ({ activeTab }) => {
                 return <Account />
             case 'ships':
                 return <ShipList />
-            case 'settings':
-                return <div>Settings Content</div>;
             default:
                 return <div>Select a tab</div>;
         }
     };
 
     return (
-        <div className="content-area">
+        <div className="content-area w-full">
             {renderContent()}
         </div>
     );

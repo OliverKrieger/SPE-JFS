@@ -8,23 +8,24 @@ interface DashLeftNavProps {
 const DashLeftNav: React.FC<DashLeftNavProps> = ({ activeTab, setActiveTab }) => {
     const tabs = [
         { name: 'profile', label: 'Profile', icon: '👤' },
-        { name: 'ships', label: 'Ships', icon: '🚀' },
-        { name: 'settings', label: 'Settings', icon: '⚙️' },
+        { name: 'ships', label: 'Ships', icon: '🚀' }
     ];
 
     return (
-        <nav className="left-nav">
-            <ul>
+        <nav className="left-nav w-[150px] flex-1 text-center border-r-2 border-r-slate-600">
+            <div>
                 {tabs.map(tab => (
-                    <li
+                    <div
                         key={tab.name}
                         className={activeTab === tab.name ? 'active' : ''}
                         onClick={() => setActiveTab(tab.name)}
                     >
-                        <span>{tab.icon}</span> {tab.label}
-                    </li>
+                        <div className='p-4 cursor-pointer hover:bg-slate-500 transition-all ease-in-out'>
+                            <span>{tab.icon}</span> {tab.label}
+                        </div>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </nav>
     );
 };

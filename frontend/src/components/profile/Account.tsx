@@ -35,26 +35,28 @@ const Account: React.FC = () => {
     };
 
     return (
-        <div className='account-container'>
-            {user ? (
-                <div>
-                    <span>{user.username}</span>
-                    <span>{user.faction}</span>
-                </div>
-            ) : (
-                <div>
-                    <span>Error</span>
-                </div>
-            )}
-            <button onClick={() => openOverlay(
-                <ConfirmationDialog
-                    message="Are you sure you want to delete your account?"
-                    onConfirm={handleConfirm}
-                    onCancel={handleCancel}
-                />
-            )}>
-                Delete Account
-            </button>
+        <div className='account-container h-full w-full'>
+            <div className="flex flex-col h-full items-center justify-center">
+                {user ? (
+                    <div className="text-center space-y-4 mb-4">
+                        <div className="text-lg"><strong>Username: </strong>{user.username}</div>
+                        <div className="text-lg"><strong>Faction: </strong>{user.faction}</div>
+                    </div>
+                ) : (
+                    <div>
+                        <span>Error</span>
+                    </div>
+                )}
+                <button onClick={() => openOverlay(
+                    <ConfirmationDialog
+                        message="Are you sure you want to delete your account?"
+                        onConfirm={handleConfirm}
+                        onCancel={handleCancel}
+                    />
+                )}>
+                    Delete Account
+                </button>
+            </div>
         </div>
     );
 };

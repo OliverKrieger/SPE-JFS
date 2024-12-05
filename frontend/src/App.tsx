@@ -1,8 +1,6 @@
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-import './styles/App.css';
-
 import Home from './pages/Home';
 
 import { AlertProvider } from './context/AlertContext';
