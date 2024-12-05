@@ -12,8 +12,8 @@ const DashLeftNav: React.FC<DashLeftNavProps> = ({ activeTab, setActiveTab }) =>
     ];
 
     return (
-        <nav className="left-nav w-[150px] flex-1 text-center border-r-2 border-r-slate-600">
-            <div>
+        <nav className="left-nav sm:w-[150px] sm:flex-1 text-center sm:border-r-2 border-r-slate-600">
+            <div className='flex sm:flex-col justify-center'>
                 {tabs.map(tab => (
                     <div
                         key={tab.name}

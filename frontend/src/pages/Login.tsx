@@ -10,7 +10,7 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className='login-container text-center flex flex-col min-h-screen items-center justify-center w-96 mx-auto'>
+        <div className='login-container text-center flex flex-col min-h-screen items-center justify-center w-48 sm:w-96 mx-auto'>
             <div>
                 {activeComponent === 'SignIn' ? <SignIn /> : <SignUp toggle={toggleComponent} />}
             </div>
