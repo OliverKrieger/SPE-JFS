@@ -17,6 +17,7 @@ services:
       JWT_SECRET: nXFgq8N2XXWkNf3zKfLg3mrFnC+BGdbIkCFOgmlJfwc=
       BACKEND_PORT: 5000
       FRONTEND_URL: http://localhost:3000
+      NODE_ENV: development
     depends_on:
       - db
 

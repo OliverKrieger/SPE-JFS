@@ -93,7 +93,9 @@ const SignIn: React.FC = () => {
         <div className='sign-in-container'>
             <h1>Sign In</h1>
             {loading ? (
-                <LoadingSpinner />
+                <div className="my-6">
+                    <LoadingSpinner />
+                </div>
             ) : (
                 <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
                     <div>

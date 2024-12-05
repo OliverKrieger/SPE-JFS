@@ -96,7 +96,9 @@ const SignUp: React.FC<SignUpProps> = (toggle) => {
         <div className='sign-up-container'>
             <h1>Sign Up</h1>
             {loading ? (
-                <LoadingSpinner />
+                <div className="my-6">
+                    <LoadingSpinner />
+                </div>
             ) : (
                 <form onSubmit={handleSubmit} className="my-6 space-y-6 flex flex-col">
                     <div>
