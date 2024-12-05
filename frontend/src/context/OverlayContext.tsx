@@ -33,7 +33,7 @@ export const OverlayProvider: React.FC<{ children: ReactNode }> = ({ children })
         <OverlayContext.Provider value={{ openOverlay, closeOverlay }}>
             {children}
             {isOverlayOpen && (
-                <div onClick={closeOverlay} className="fixed inset-0 bg-black bg-opacity-75 cursor-pointer flex justify-center items-center z-50">
+                <div onClick={closeOverlay} className="fixed inset-0 bg-black bg-opacity-75 cursor-pointer flex justify-center z-50 overflow-auto">
                     <div className="p-6 rounded-lg shadow-lg relative">
                         <div className='animate-slideInRight'>
                             {overlayContent}

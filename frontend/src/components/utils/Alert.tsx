@@ -15,7 +15,7 @@ const Alert: React.FC<AlertProps> = ({ message, type }) => {
   };
 
   return (
-    <div className={`${alertStyles[type]} text-white p-4 rounded-md mb-2 animate-slideInRight`}>
+    <div className={`${alertStyles[type]} text-white p-4 rounded-md mb-2 z-100 animate-slideInRight`}>
       {message}
     </div>
   );
